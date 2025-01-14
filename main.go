@@ -8,6 +8,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"./docs"
 	httpSwagger "github.com/swaggo/http-swagger"
 )
 
@@ -146,6 +147,12 @@ func moveFileHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	docs.SwaggerInfo.Title = "File Management API"
+	docs.SwaggerInfo.Version = "1.0"
+	docs.SwaggerInfo.Description = "This is a sample server for managing files."
+	docs.SwaggerInfo.Host = "localhost:8080"
+	docs.SwaggerInfo.BasePath = "/"
+
 	http.HandleFunc("/listFiles", listFilesHandler)
 	http.HandleFunc("/downloadFile", downloadFileHandler)
 	http.HandleFunc("/moveFile", moveFileHandler)

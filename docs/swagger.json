@@ -1,0 +1,119 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is a sample server for managing files.",
+        "title": "File Management API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/",
+    "paths": {
+        "/downloadFile": {
+            "get": {
+                "description": "Download a file from the incoming directory",
+                "produces": [
+                    "application/octet-stream"
+                ],
+                "tags": [
+                    "files"
+                ],
+                "summary": "Download file",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "File name",
+                        "name": "file",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/main.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/listFiles": {
+            "get": {
+                "description": "Get a list of files in the incoming directory",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "files"
+                ],
+                "summary": "List files",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/main.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/moveFile": {
+            "post": {
+                "description": "Move a file from the incoming directory to the outgoing directory",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "files"
+                ],
+                "summary": "Move file",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "File name",
+                        "name": "file",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/main.Response"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "main.Response": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,78 @@
+basePath: /
+definitions:
+  main.Response:
+    properties:
+      message:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: This is a sample server for managing files.
+  title: File Management API
+  version: "1.0"
+paths:
+  /downloadFile:
+    get:
+      description: Download a file from the incoming directory
+      parameters:
+      - description: File name
+        in: query
+        name: file
+        required: true
+        type: string
+      produces:
+      - application/octet-stream
+      responses:
+        "200":
+          description: OK
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/main.Response'
+      summary: Download file
+      tags:
+      - files
+  /listFiles:
+    get:
+      description: Get a list of files in the incoming directory
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              type: string
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/main.Response'
+      summary: List files
+      tags:
+      - files
+  /moveFile:
+    post:
+      description: Move a file from the incoming directory to the outgoing directory
+      parameters:
+      - description: File name
+        in: query
+        name: file
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/main.Response'
+      summary: Move file
+      tags:
+      - files
+swagger: "2.0"

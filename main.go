@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+
+	httpSwagger "github.com/swaggo/http-swagger"
 )
 
 var config *Config
@@ -35,6 +37,20 @@ func loadConfig() (*Config, error) {
 	return &config, nil
 }
 
+// @title File Management API
+// @version 1.0
+// @description This is a sample server for managing files.
+// @host localhost:8080
+// @BasePath /
+
+// listFilesHandler godoc
+// @Summary List files
+// @Description Get a list of files in the incoming directory
+// @Tags files
+// @Produce json
+// @Success 200 {array} string
+// @Failure 500 {object} Response
+// @Router /listFiles [get]
 func listFilesHandler(w http.ResponseWriter, r *http.Request) {
 
 	config, error := loadConfig()
@@ -68,6 +84,15 @@ func listFilesHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(fileNames)
 }
 
+// downloadFileHandler godoc
+// @Summary Download file
+// @Description Download a file from the incoming directory
+// @Tags files
+// @Produce octet-stream
+// @Param file query string true "File name"
+// @Success 200
+// @Failure 404 {object} Response
+// @Router /downloadFile [get]
 func downloadFileHandler(w http.ResponseWriter, r *http.Request) {
 	config, error := loadConfig()
 	if error != nil {
@@ -90,6 +115,15 @@ func downloadFileHandler(w http.ResponseWriter, r *http.Request) {
 	io.Copy(w, file)
 }
 
+// moveFileHandler godoc
+// @Summary Move file
+// @Description Move a file from the incoming directory to the outgoing directory
+// @Tags files
+// @Produce json
+// @Param file query string true "File name"
+// @Success 200 {object} Response
+// @Failure 500 {object} Response
+// @Router /moveFile [post]
 func moveFileHandler(w http.ResponseWriter, r *http.Request) {
 	config, error := loadConfig()
 	if error != nil {
@@ -115,5 +149,6 @@ func main() {
 	http.HandleFunc("/listFiles", listFilesHandler)
 	http.HandleFunc("/downloadFile", downloadFileHandler)
 	http.HandleFunc("/moveFile", moveFileHandler)
+	http.HandleFunc("/swagger/", httpSwagger.WrapHandler)
 	http.ListenAndServe(":8080", nil)
 }
